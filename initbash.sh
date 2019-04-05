@@ -1,2 +1,4 @@
 #!/bin/bash
-echo"started!"
+
+
+echo "started!"

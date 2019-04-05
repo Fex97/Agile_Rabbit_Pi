@@ -37,6 +37,3 @@ while True:
 
 ser.write("AT+CBC")
 
-while True: 
-	response = ser.readline()
-	if
