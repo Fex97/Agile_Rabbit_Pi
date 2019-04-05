@@ -51,4 +51,6 @@ while True:
 	else:
 		time.sleep(4)
 		ser.write("AT+CGNSINF\r")
+		
+	import testpy.py
 	

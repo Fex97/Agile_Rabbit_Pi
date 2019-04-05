@@ -42,6 +42,5 @@ while True:
 
 if testsPassed >=2:
 	import serialTest
-	#os.system('python serialTest.py')
-	#execfile('serialTest.py')
+
 
