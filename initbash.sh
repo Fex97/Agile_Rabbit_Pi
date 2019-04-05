@@ -14,4 +14,5 @@ echo "
 
 
 python /home/pi/programs/git/Agile_Rabbit_Pi/startupTest.py
+echo "Python script done"
 cd /home/pi/programs/git/Agile_Rabbit_Pi
