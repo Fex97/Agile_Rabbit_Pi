@@ -3,14 +3,16 @@ import time
 
 ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 fail = 0
+testsPassed = 0
 ser.write("AT\r")
 while True:
 	response = ser.readline()
 	if "OK" in response:
+		testsPassed = testsPassed + 1
 		break
 
 	else:
-		fail = fail +1
+		fail = fail + 1
 		time.sleep(2)
 		ser.write("AT\r")
 
@@ -24,6 +26,7 @@ ser.write("AT+CGNSINF\r")
 while True:
 	response = ser.readline()
 	if "+CGNSINF: 1,1" in response:
+		testsPassed = testsPassed + 1
 		break
 
 	else:
@@ -31,9 +34,10 @@ while True:
 		time.sleep(2)
 		ser.write("AT+CGNSINF\r")
 
-	if fail>10:
+	if fail>100:
 		print "CONNECTION TO SATALITE FAILED\n"
 		break
 
-ser.write("AT+CBC")
+if testsPassed >=2:
+	system('python serialTest.py')
 
