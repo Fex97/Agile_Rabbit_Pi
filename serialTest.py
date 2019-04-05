@@ -16,7 +16,7 @@ while True:
 
 ser.write("AT+CBC\r")
 
-print "Checking for battery levels...."
+print "Checking for battery levels..."
 
 while True:
 	response = ser.readline()
