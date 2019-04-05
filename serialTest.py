@@ -40,7 +40,7 @@ while True:
 		long = tempSplit[4]
 		print("Latitude = "+lat)
 		print("Longitude = "+long)
-		f=open("textfile.txt","w+")
+		f=open("cooords.txt","w+")
 		f.write("\nLatitude: " +lat)
 		f.write("\nLongitude: " +long)
 		f.close()
