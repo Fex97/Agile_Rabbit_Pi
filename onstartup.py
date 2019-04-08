@@ -77,6 +77,7 @@ while True:
                 if fail>50:
                         print ("cmd: ",cmd," ERROR \n\r")
                         logging.ERROR(" ERROR\n\r")
+                        num = num+1
                         fail=0
                         break
         if last_cmd == num:
