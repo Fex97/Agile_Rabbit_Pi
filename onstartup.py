@@ -12,7 +12,7 @@ logging.basicConfig(filename='startup.log', filemode='w', format='%(levelname)s 
 
 print ("INIT RABBITPI\n\r")
 logging.INFO("Latest Startup log")
-cmd=1
+num=1
 last_cmd=12
 fail=0
 okay=0
