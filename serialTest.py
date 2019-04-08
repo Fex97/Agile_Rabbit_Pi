@@ -5,18 +5,18 @@ ser=serial.Serial('/dev/serial0', 115200, bytesize=serial.EIGHTBITS, parity=seri
 ser.write("AT+CGNSPWR=1\r")
 ser.write("AT+CGNSPWR?\r")
 
-print "Checking FONA808 powerstatus...."
+print "CHECKING FONA808 POWERSTATUS...\n\r"
 
 while True:
 	response = ser.readline()
 	print response
 	if "1" in response:
-		print("Power is on")
+		print("POWER OK...\n\r")
 		break
 
 ser.write("AT+CBC\r")
 
-print "Checking for battery levels..."
+print "CHECKING FONA808 BATTERY LEVELS...\n\r"
 
 while True:
 	response = ser.readline()
@@ -24,13 +24,13 @@ while True:
 		tempSplit = response.split(",")
 		batteryPercent = tempSplit[1]
 		voltageLevel = tempSplit[2]
-		print ("Battery percent = "+batteryPercent)
-		print ("Voltage level = "+voltageLevel)
+		print ("BATTERY LEVEL: "+batteryPercent)
+		print ("VOLTAGE LEVEL: "+voltageLevel)
 		break
 
 ser.write("AT+CGNSINF\r")
 
-print "Checking GPS coordinates...."
+print "REQUESTING GPS COORDINATES...\n\r"
 
 while True:
 	response = ser.readline()
@@ -38,11 +38,11 @@ while True:
 		tempSplit = response.split(",")
 		lat = tempSplit[3]
 		long = tempSplit[4]
-		print("Latitude = "+lat)
-		print("Longitude = "+long)
+		print("LATITUDE: \n\r"+lat)
+		print("LONGITUDE: \n\r"+long)
 		f=open("cooords.txt","w+")
-		f.write("\nLatitude: " +lat)
-		f.write("\nLongitude: " +long)
+		f.write("\nLatitude: \n\r" +lat)
+		f.write("\nLongitude: \n\r" +long)
 		f.close()
 		break
 	if "+CGNSINF: 1,0" in response:
