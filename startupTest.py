@@ -113,7 +113,7 @@ while True:
 
 
 #GPS INIT TEST OK...START SIM TEST...
-ser.write("AT+SAPBR=3,1,"CONTYPE","GPRS")
+ser.write("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"\r")
 
 print "INIT GPRS/HTTP...\n\r"
 f.write("TESTING GPRS/HTTP")
@@ -128,7 +128,7 @@ while True:
 		print "AT+SAPBR 3,1 ERROR\n\r"
 		break
 		
-ser.write("AT+SAPBR=1,1)
+ser.write("AT+SAPBR=1,1\r")
 
 while True:
 	response = ser.readline()
@@ -140,7 +140,7 @@ while True:
 	else:
 		print "AT+SAPBR 1,1 ERROR\n\r"
 		break
-ser.write("AT+SAPBR=2,1)
+ser.write("AT+SAPBR=2,1\r")
 while True:
 	response = ser.readline()
 	f.write(respone+"\n\r")
@@ -152,7 +152,7 @@ while True:
 		print "AT+SAPBR 2,1 ERROR\n\r"
 		break
 		
-ser.write("AT+HTTPINIT)
+ser.write("AT+HTTPINIT\r")
 while True:
 	response = ser.readline()
 	f.write(respone+"\n\r")
@@ -164,7 +164,7 @@ while True:
 		print "AT+HTTPINIT ERROR\n\r"
 		break
 		
-ser.write("AT+HTTPPARA="CID",1)
+ser.write("AT+HTTPPARA=\"CID\",1\r")
 while True:
 	response = ser.readline()
 	f.write(respone+"\n\r")
@@ -177,7 +177,7 @@ while True:
 		break
 
 print "SET URL TO FIREBASE...\n\r"
-ser.write("AT+HTTPPARA="URL","HTTP://XXXXXXXXXXXXXXXX)
+ser.write("AT+HTTPPARA=\"URL\",\"HTTP://XXXXXXXXXXXXXXXX \r")
 while True:
 	response = ser.readline()
 	f.write(respone+"\n\r")
