@@ -1,5 +1,7 @@
 import serial
 import time
+from firebase import firebase
+firebase=firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com', None)
 
 ser=serial.Serial('/dev/serial0', 115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=1)
 ser.write("AT+CGNSPWR=1\r")
@@ -40,10 +42,8 @@ while True:
 		long = tempSplit[4]
 		print("LATITUDE: \n\r"+lat)
 		print("LONGITUDE: \n\r"+long)
-		f=open("cooords.txt","w+")
-		f.write("\nLatitude: \n\r" +lat)
-		f.write("\nLongitude: \n\r" +long)
-		f.close()
+		cords = {"long": long, "lat": lat}
+		firebase.post('/coords', cords)
 		break
 	if "+CGNSINF: 1,0" in response:
 		time.sleep(4)
