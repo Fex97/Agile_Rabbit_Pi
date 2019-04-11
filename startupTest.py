@@ -10,8 +10,9 @@ print "REQUEST UART CONNECTION TO FONA808...\n\r"
 f.write("TESTING AT ")
 ser.write("AT\r")
 while True:
+	time.sleep(10)
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "UART CONNECTION PASSED.\n\r"
 		testsPassed = testsPassed + 1
@@ -20,7 +21,7 @@ while True:
 	else:
 		print "UART CONNECTION FAILED\n\r"
 		break
-		
+
 ser.write("AT+CGNSPWR=1\r")
 ser.write("AT+CGNSPWR?\r")
 
@@ -28,17 +29,17 @@ print "CHECKING FONA808 POWERSTATUS...\n\r"
 f.write("TESTING FONA808 POWER")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	print response
 	if "1" in response:
 		print("POWER OK...\n\r")
 		testsPassed = testsPassed + 1
 		break
-		
+
 	else:
 		print "POWER REQUEST ERROR\n\r"
 		break
-		
+
 
 ser.write("AT+CBC\r")
 
@@ -47,7 +48,7 @@ f.write("TESTING FONA808 BATTERY")
 
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "+CBC:" in response:
 		tempSplit = response.split(",")
 		batteryPercent = tempSplit[1]
@@ -119,7 +120,7 @@ print "INIT GPRS/HTTP...\n\r"
 f.write("TESTING GPRS/HTTP")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "AT+SAPBR 3,1 OK\n\r"
 		testsPassed = testsPassed + 1
@@ -143,7 +144,7 @@ while True:
 ser.write("AT+SAPBR=2,1\r")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "AT+SAPBR 2,1 OK\n\r"
 		testsPassed = testsPassed + 1
@@ -155,7 +156,7 @@ while True:
 ser.write("AT+HTTPINIT\r")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "HTTPINIT OK\n\r"
 		testsPassed = testsPassed + 1
@@ -167,7 +168,7 @@ while True:
 ser.write("AT+HTTPPARA=\"CID\",1\r")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "HTTPPARA OK\n\r"
 		testsPassed = testsPassed + 1
@@ -180,7 +181,7 @@ print "SET URL TO FIREBASE...\n\r"
 ser.write("AT+HTTPPARA=\"URL\",\"HTTP://XXXXXXXXXXXXXXXX \r")
 while True:
 	response = ser.readline()
-	f.write(respone+"\n\r")
+	f.write(response+"\n\r")
 	if "OK" in response:
 		print "URL OK\n\r"
 		testsPassed = testsPassed + 1
@@ -189,9 +190,9 @@ while True:
 		print "URL ERROR\n\r"
 		break
 		
-if testsPassed >=10
+if testsPassed >=10:
 	print "STARTUP SUCCESS!"
-else
+else:
 	print "RABBIT STARTUP FAILED CHECK LOG..."
 f.close()	
 	

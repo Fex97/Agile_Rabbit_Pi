@@ -7,15 +7,16 @@ ser = serial.Serial('/dev/serial0',
                                         parity=serial.PARITY_NONE,
                                         stopbits=serial.STOPBITS_ONE,
                                         timeout=1)
-                                            
+
 logging.basicConfig(filename='startup.log', filemode='w', format='%(levelname)s - %(message)s')
 
 print ("INIT RABBITPI\n\r")
-logging.INFO("Latest Startup log")
+logging.info('Latest Startup log')
 num=1
 last_cmd=12
 fail=0
 okay=0
+runonce = False
 def switch_cmd(num):
     switcher = {
         1: "AT\r",
@@ -33,10 +34,10 @@ def switch_cmd(num):
         12: "AT+HTTPPARA=\"URL\",\"HTTP://XXXXXXXXXXXXXXXX\r"
     }
 while True:
-        cmd = switcher(num)
-        ser.write(cmd)
-        logging.INFO(cmd+" ")
-        runonce=false
+        cmd = switch_cmd(num)
+        ser.write(str(cmd).encode('ascii')
+       # logging.info('%s', cmd)
+        runonce=False
         while True:
                 response = ser.readline()
                 #Specialcases before OK
@@ -59,13 +60,13 @@ while True:
                         voltageLevel = tempSplit[2]
                         print ("BATTERY LEVEL: "+batteryPercent+"\n\r")
                         print ("VOLTAGE LEVEL: "+voltageLevel+"\n\r")
-                        logging.INFO("BATTERY LEVEL: "+batteryPercent)
-                        logging.INFO("VOLTAGE LEVEL: "+voltageLevel)
+                       # logging.info("BATTERY LEVEL: "+batteryPercent)
+                       # logging.info("VOLTAGE LEVEL: "+voltageLevel)
                         runonce=true
                 if "OK" in response:
                         okay = okay+1
                         print ("cmd: ",cmd," SUCCESS \n\r")
-                        logging.INFO(" SUCCESS\n\r")
+                        logging.info(" SUCCESS\n\r")
                         num = num+1
                         fail=0
                         break
@@ -76,7 +77,7 @@ while True:
 
                 if fail>50:
                         print ("cmd: ",cmd," ERROR \n\r")
-                        logging.ERROR(" ERROR\n\r")
+                        logging.error(" ERROR\n\r")
                         num = num+1
                         fail=0
                         break
