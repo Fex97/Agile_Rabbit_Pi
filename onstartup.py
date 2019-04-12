@@ -34,7 +34,6 @@ for x in range(last_cmd):
     logging.error("request at cmd: " + str(cmd))
     while True:
         response = ser.readline()
-        #response = ''
         if "+" in response:
             if num == 2 and runonce == 0:
                 print ("PWR")
@@ -66,26 +65,24 @@ for x in range(last_cmd):
                 runonce=1
         if "OK" in response:
             okay = okay+1
-            print ("cmd: ",cmd," SUCCESS ")
+            print ("SUCCESS")
             logging.error(" SUCCESS\n\r")
             num = num+1
             fail=0
             break
         else:
             fail = fail +1
-            ser.write(str(cmd))
-            
             if num == 6:
                 time.sleep(0.5)
                 if fail>300:
-                    print ("cmd: ",cmd," ERROR ")
+                    print ("ERROR")
                     logging.error(" ERROR\n\r")
                     num = num+1
                     fail=0
                     break
             else:
                 if fail>50:
-                    print ("cmd: ",cmd," ERROR ")
+                    print ("ERROR")
                     logging.error(" ERROR\n\r")
                     num = num+1
                     fail=0
