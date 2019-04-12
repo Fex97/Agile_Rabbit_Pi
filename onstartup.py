@@ -2,90 +2,103 @@ import serial
 import logging
 import time
 import os
-ser = serial.Serial('/dev/serial0',
-                                        115200,bytesize=serial.EIGHTBITS,
-                                        parity=serial.PARITY_NONE,
-                                        stopbits=serial.STOPBITS_ONE,
-                                        timeout=1)
+ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 
-logging.basicConfig(filename='startup.log', filemode='w', format='%(levelname)s - %(message)s')
+logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 
-print ("INIT RABBITPI\n\r")
-logging.info('Latest Startup log')
-num=1
-last_cmd=12
+print ("STARTUP RABBIT_PI GSM module...\n\r")
+logging.error("Latest Startup log")
+num=0
+last_cmd=7
 fail=0
 okay=0
-runonce = False
+totalfailure=0
+runonce = 0
 def switch_cmd(num):
     switcher = {
-        1: "AT\r",
-        2: "AT+CGNSPWR=1\r",
-        3: "AT+CGNSPWR?\r",
-        4: "AT+COPS?\r",
-        5: "AT+CSQ\r",
-        6: "AT+CBC\r",
-        #INSERT GPS HERE TO GET DATE AND COORDS BEFORE SIM
-        7: "AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"\r",
-        8: "AT+SAPBR=1,1\r",
-        9: "AT+SAPBR=2,1\r",
-        10: "AT+HTTPINIT\r",
-        11: "AT+HTTPPARA=\"CID\",1\r",
-        12: "AT+HTTPPARA=\"URL\",\"HTTP://XXXXXXXXXXXXXXXX\r"
+    0: "AT\r",
+    1: "AT+CGNSPWR=1\r",
+    2: "AT+CGNSPWR?\r",
+    3: "AT+COPS?\r",
+    4: "AT+CSQ\r",
+    5: "AT+CBC\r",
+    6: "AT+CGNINF\r",
     }
-while True:
-        cmd = switch_cmd(num)
-        ser.write(str(cmd).encode('ascii')
-       # logging.info('%s', cmd)
-        runonce=False
-        while True:
-                response = ser.readline()
-                #Specialcases before OK
-                #NOTDONE
-                if num == 3 and runonce == false:
-                        print ("PWR\n\r")
-                        runonce=true
-                #NOTDONE
-                if num == 4 and runonce == false:
-                        print ("COPS\n\r")
-                        runonce=true
-                #NOTDONE
-                if num == 5 and runonce == false:
-                        print ("RSSI\n\r")
-                        runonce=true
-                #batterycheck
-                if num == 6 and runonce == false:
-                        tempSplit = response.split(",")
-                        batteryPercent = tempSplit[1]
-                        voltageLevel = tempSplit[2]
-                        print ("BATTERY LEVEL: "+batteryPercent+"\n\r")
-                        print ("VOLTAGE LEVEL: "+voltageLevel+"\n\r")
-                       # logging.info("BATTERY LEVEL: "+batteryPercent)
-                       # logging.info("VOLTAGE LEVEL: "+voltageLevel)
-                        runonce=true
-                if "OK" in response:
-                        okay = okay+1
-                        print ("cmd: ",cmd," SUCCESS \n\r")
-                        logging.info(" SUCCESS\n\r")
-                        num = num+1
-                        fail=0
-                        break
-                else:
-                        fail = fail +1
-                        time.sleep(2)
-                        ser.write(cmd)
+    return switcher.get(num)
+    
+for x in range(last_cmd):
+    cmd = switch_cmd(num)
+    ser.write(str(cmd))
+    runonce=0
+    print("REQUEST AT " + str(cmd))
+    logging.error("request at cmd:" + str(cmd))
+    while True:
+        response = ser.readline()
+        response = '' 
+        #Specialcases before OK
+        #NOTDONE
+   
+        if "OK" in response:
+            if num == 2 and runonce == 0:
+                print ("PWR\n\r")
+                logging.error("GMS POWER: ")
+                runonce=1
 
-                if fail>50:
-                        print ("cmd: ",cmd," ERROR \n\r")
-                        logging.error(" ERROR\n\r")
-                        num = num+1
-                        fail=0
-                        break
-        if last_cmd == num:
-                break
-if okay >=last_cmd:
-        print ("STARTUP SUCCESS!\n\r")
-else:
-        print ("STARTUP FAILED."+okay+"/"+last_cmd+"\n\r")
+            if num == 3 and runonce == 0:
+                print ("COPS\n\r")
+                logging.error("COPS: ")
+                runonce=1
+
+            if num == 4 and runonce == 0:
+                print ("RSSI\n\r")
+                logging.error("RSSI: ")
+                runonce=1
+
+            if num == 5 and runonce == 0:
+                tempSplit = response.split(",")
+                batteryPercent = tempSplit[1]
+                voltageLevel = tempSplit[2]
+                print ("BATTERY LEVEL: "+batteryPercent+"\n\r")
+                print ("VOLTAGE LEVEL: "+voltageLevel+"\n\r")
+                logging.error("BATTERY LEVEL: "+batteryPercent)
+                logging.error("VOLTAGE LEVEL: "+voltageLevel)
+                runonce=1
+            if num == 6 and runonce == 0:
+                print ("REQUEST GPS FIX...\n\r this may take a while \n\r please stand by...\n\r")
+                runonce=1
             
+            okay = okay+1
+            print ("cmd: ",cmd," SUCCESS \n\r")
+            logging.error(" SUCCESS\n\r")
+            num = num+1
+            fail=0
+            break
+        else:
+            fail = fail +1
+            time.sleep(0.5)
+            ser.write(cmd)
+            if num == 6:
+                if fail>300:
+                    print ("cmd: ",cmd," ERROR \n\r")
+                    logging.error(" ERROR\n\r")
+                    num = num+1
+                    fail=0
+                    break
+            else:
+                if fail>50:
+                    print ("cmd: ",cmd," ERROR \n\r")
+                    logging.error(" ERROR\n\r")
+                    num = num+1
+                    fail=0
+                    break
+        if last_cmd == num:
+            break
+     
+if okay >=last_cmd:
+    print ("STARTUP SUCCESS!\n\r")
+    logging.error(" LAST STARTUP SUCCESS!\n\r")
+else:
+    print("STARTUP FAILED...")
+    logging.error(" LAST STARTUP FAILED!\n\r")
+
 
