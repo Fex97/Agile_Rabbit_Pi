@@ -1,4 +1,4 @@
-simport serial
+import serial
 import logging
 import time
 import os
@@ -7,7 +7,7 @@ ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=seria
 logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 
 print ("STARTUP RABBIT_PI GSM module...\n\r")
-logging.error("Latest Startup log")
+logging.error("LATEST STARTUP LOG")
 num=0
 last_cmd=7
 fail=0
@@ -34,8 +34,8 @@ for x in range(last_cmd):
     logging.error("request at cmd: " + str(cmd))
     while True:
         response = ser.readline()
-        #response = '' 
-        if "OK" in response:
+        #response = ''
+        if "+" in response:
             if num == 2 and runonce == 0:
                 print ("PWR")
                 logging.error("GMS POWER: ")
@@ -64,7 +64,7 @@ for x in range(last_cmd):
                 print ("REQUEST GPS FIX ")
                 print("THIS MAY TAKE SOME TIME...")
                 runonce=1
-            
+        if "OK" in response:
             okay = okay+1
             print ("cmd: ",cmd," SUCCESS ")
             logging.error(" SUCCESS\n\r")
