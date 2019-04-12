@@ -22,7 +22,7 @@ def switch_cmd(num):
     3: "AT+COPS?\r",
     4: "AT+CSQ\r",
     5: "AT+CBC\r",
-    6: "AT+CGNINF\r",
+    6: "AT+CGNSINF\r",
     }
     return switcher.get(num)
     
@@ -34,7 +34,7 @@ for x in range(last_cmd):
     logging.error("request at cmd: " + str(cmd))
     while True:
         response = ser.readline()
-        if "+" in response:
+        if "+" in response and not cmd in response:
             if num == 2 and runonce == 0:
                 print ("PWR")
                 logging.error("GMS POWER: ")
@@ -54,8 +54,8 @@ for x in range(last_cmd):
                 tempSplit = response.split(",")
                 batteryPercent = tempSplit[1]
                 voltageLevel = tempSplit[2]
-                print ("BATTERY LEVEL: "+batteryPercent+"\n\r")
-                print ("VOLTAGE LEVEL: "+voltageLevel+"\n\r")
+                print ("BATTERY LEVEL: "+batteryPercent)
+                print ("VOLTAGE LEVEL: "+voltageLevel)
                 logging.error("BATTERY LEVEL: "+batteryPercent)
                 logging.error("VOLTAGE LEVEL: "+voltageLevel)
                 runonce=1
@@ -63,6 +63,7 @@ for x in range(last_cmd):
                 print ("REQUEST GPS FIX ")
                 print("THIS MAY TAKE SOME TIME...")
                 runonce=1
+            print(response)
         if "OK" in response:
             okay = okay+1
             print ("SUCCESS")

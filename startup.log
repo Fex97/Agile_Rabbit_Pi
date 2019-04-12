@@ -1,0 +1,30 @@
+LATEST STARTUP LOG
+request at cmd: AT
+ SUCCESS
+
+request at cmd: AT+CGNSPWR=1
+ SUCCESS
+
+request at cmd: AT+CGNSPWR?
+GMS POWER: 
+ SUCCESS
+
+request at cmd: AT+COPS?
+COPS: 
+ SUCCESS
+
+request at cmd: AT+CSQ
+RSSI: 
+ SUCCESS
+
+request at cmd: AT+CBC
+BATTERY LEVEL: 100
+VOLTAGE LEVEL: 4208
+
+ SUCCESS
+
+request at cmd: AT+CGNSINF
+ SUCCESS
+
+ LAST STARTUP SUCCESS!
+
