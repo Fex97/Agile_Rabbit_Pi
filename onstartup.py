@@ -1,4 +1,4 @@
-import serial
+simport serial
 import logging
 import time
 import os
@@ -30,27 +30,24 @@ for x in range(last_cmd):
     cmd = switch_cmd(num)
     ser.write(str(cmd))
     runonce=0
-    print("REQUEST AT " + str(cmd))
-    logging.error("request at cmd:" + str(cmd))
+    print("REQUEST: " + str(cmd))
+    logging.error("request at cmd: " + str(cmd))
     while True:
         response = ser.readline()
-        response = '' 
-        #Specialcases before OK
-        #NOTDONE
-   
+        #response = '' 
         if "OK" in response:
             if num == 2 and runonce == 0:
-                print ("PWR\n\r")
+                print ("PWR")
                 logging.error("GMS POWER: ")
                 runonce=1
 
             if num == 3 and runonce == 0:
-                print ("COPS\n\r")
+                print ("COPS")
                 logging.error("COPS: ")
                 runonce=1
 
             if num == 4 and runonce == 0:
-                print ("RSSI\n\r")
+                print ("RSSI")
                 logging.error("RSSI: ")
                 runonce=1
 
@@ -64,29 +61,31 @@ for x in range(last_cmd):
                 logging.error("VOLTAGE LEVEL: "+voltageLevel)
                 runonce=1
             if num == 6 and runonce == 0:
-                print ("REQUEST GPS FIX...\n\r this may take a while \n\r please stand by...\n\r")
+                print ("REQUEST GPS FIX ")
+                print("THIS MAY TAKE SOME TIME...")
                 runonce=1
             
             okay = okay+1
-            print ("cmd: ",cmd," SUCCESS \n\r")
+            print ("cmd: ",cmd," SUCCESS ")
             logging.error(" SUCCESS\n\r")
             num = num+1
             fail=0
             break
         else:
             fail = fail +1
-            time.sleep(0.5)
-            ser.write(cmd)
+            ser.write(str(cmd))
+            
             if num == 6:
+                time.sleep(0.5)
                 if fail>300:
-                    print ("cmd: ",cmd," ERROR \n\r")
+                    print ("cmd: ",cmd," ERROR ")
                     logging.error(" ERROR\n\r")
                     num = num+1
                     fail=0
                     break
             else:
                 if fail>50:
-                    print ("cmd: ",cmd," ERROR \n\r")
+                    print ("cmd: ",cmd," ERROR ")
                     logging.error(" ERROR\n\r")
                     num = num+1
                     fail=0
@@ -95,7 +94,7 @@ for x in range(last_cmd):
             break
      
 if okay >=last_cmd:
-    print ("STARTUP SUCCESS!\n\r")
+    print ("STARTUP SUCCESS!")
     logging.error(" LAST STARTUP SUCCESS!\n\r")
 else:
     print("STARTUP FAILED...")

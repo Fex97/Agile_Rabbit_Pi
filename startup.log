@@ -1,0 +1,20 @@
+Latest Startup log
+request at cmd: AT
+ ERROR
+
+request at cmd: AT+CGNSPWR=1
+ ERROR
+
+request at cmd: AT+CGNSPWR?
+ ERROR
+
+request at cmd: AT+COPS?
+ ERROR
+
+request at cmd: AT+CSQ
+ ERROR
+
+request at cmd: AT+CBC
+ ERROR
+
+request at cmd: AT+CGNINF
