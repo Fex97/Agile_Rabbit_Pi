@@ -2,6 +2,8 @@ import serial
 import logging
 import time
 import os
+from firebase import firebase
+firebase=firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 
 logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
@@ -102,6 +104,12 @@ for x in range(last_cmd):
                     		print ("LONGITUDE: "+longitude)
                     		logging.error("LATITUDE: "+latitude)
                     		logging.error("LONGITUDE: "+longitude)
+				#os.system("sudo pon fona")
+				#time.sleep(3)
+				#coords = {"longitude": longitude,"latitude": latitude}
+				#firebase.post('/coordinates',coords)
+				#os.system("sodo poff fona")
+				
                 
             	print("\n"+response+"\n")
         if "OK" in response:
@@ -133,8 +141,9 @@ print(okay)
 if okay >=5:
 	print ("STARTUP SUCCESS!")
     	logging.error(" LAST STARTUP SUCCESS!\n\r")
+	import bt_test
 else:
     	print("STARTUP FAILED...")
     	logging.error(" LAST STARTUP FAILED!\n\r")
-
+	logging.error("PLEASE RESTART  DEVICE AND CHECK ERRORS\n\r")
 
