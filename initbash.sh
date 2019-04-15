@@ -14,6 +14,6 @@ echo "
 
 
 python /home/pi/programs/git/Agile_Rabbit_Pi/onstartup.py
-python /home/pi/programs/git/Agile_Rabbit_Pi/serialTest.py
+#python /home/pi/programs/git/Agile_Rabbit_Pi/serialTest.py
 echo "done..."
 

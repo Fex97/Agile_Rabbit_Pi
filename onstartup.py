@@ -90,10 +90,10 @@ for x in range(last_cmd):
                 	print ("REQUEST GPS FIX ")
                 	print("THIS MAY TAKE SOME TIME...")
                 	runonce=1
+			time.sleep(2)
             	if num == 6:
                 	tempSplit = response.split(",")
                 	fix = tempSplit[1]
-			print(fix)
                 	if fix=="1":
                     		okay = okay+1
                     		latitude = tempSplit[3]
@@ -107,6 +107,7 @@ for x in range(last_cmd):
         if "OK" in response:
         	if num == 6 and fix == "0":
                 	fail = fail+1
+			time.sleep(0.5)
                 	ser.write(cmd)
             	else: 
                 	print ("OK")
