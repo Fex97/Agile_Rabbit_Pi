@@ -6,11 +6,11 @@ devicelist = []
 while True:
 	print("CHECKING")
 	nrby = bluetooth.discover_devices(duration=2,lookup_names=True)
-	for addr in nrby:
-		if nrby in devicelist:
+	for item in nrby:
+		if item in devicelist:
 			print("DEVICE ALREADY IN LIST")
 		else:
-			devicelist.append(nrby)
+			devicelist.append(item)
 			print("NEW DEVICE ADDED TO LIST")
 	for x in devicelist:
 		print(x)
