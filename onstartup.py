@@ -3,6 +3,16 @@ import logging
 import time
 import os
 from firebase import firebase
+import RPi.GPIO as GPIO
+
+
+GPIO.setmode(GPIO.BOARD)
+redled = 11
+greenled = 13
+
+GPIO.setup(redled,GPIO.OUT,initial =0)
+GPIO.setup(greenled,GPIO.OUT,initial=0)
+
 firebase=firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 
@@ -27,7 +37,7 @@ def switch_cmd(num):
     6: "AT+CGNSINF\r",
     }
     return switcher.get(num)
-    
+
 for x in range(last_cmd):
     cmd = switch_cmd(num)
     ser.write(str(cmd))
@@ -86,7 +96,7 @@ for x in range(last_cmd):
                     		fail=9000
                 	else:
                     		okay = okay+1
-                    
+
                 	runonce=1
             	if num == 6 and runonce == 0:
                 	print ("REQUEST GPS FIX ")
@@ -104,20 +114,20 @@ for x in range(last_cmd):
                     		print ("LONGITUDE: "+longitude)
                     		logging.error("LATITUDE: "+latitude)
                     		logging.error("LONGITUDE: "+longitude)
-				#os.system("sudo pon fona")
-				#time.sleep(3)
-				#coords = {"longitude": longitude,"latitude": latitude}
-				#firebase.post('/coordinates',coords)
-				#os.system("sodo poff fona")
-				
-                
+				os.system("sudo pon fona")
+				time.sleep(3)
+				firebase.put('/coordinates','Latitude',latitude)
+				firebase.put('/coordinates','Longitude',longitude)
+				os.system("sudo poff fona")
+				response = "OK"
+
             	print("\n"+response+"\n")
         if "OK" in response:
         	if num == 6 and fix == "0":
                 	fail = fail+1
 			time.sleep(0.5)
                 	ser.write(cmd)
-            	else: 
+            	else:
                 	print ("OK")
                 	logging.error(" OK\n\r")
                 	num = num+1
@@ -127,7 +137,7 @@ for x in range(last_cmd):
         	print("TIMEOUT")
             	logging.error("TIMEOUT\n\r")
             	break
-            
+
         if "ERROR" in response:
             	print ("ERROR")
             	logging.error(" ERROR\n\r")
@@ -136,14 +146,18 @@ for x in range(last_cmd):
 
         if last_cmd == num:
             	break
-     
+
 print(okay)
 if okay >=5:
 	print ("STARTUP SUCCESS!")
     	logging.error(" LAST STARTUP SUCCESS!\n\r")
+	GPIO.output(greenled,1)
+	GPIO.output(redled,0)
 	import bt_test
 else:
     	print("STARTUP FAILED...")
     	logging.error(" LAST STARTUP FAILED!\n\r")
 	logging.error("PLEASE RESTART  DEVICE AND CHECK ERRORS\n\r")
+	GPIO.output(redled,1)
+	GPIO.output(greenled,0)
 

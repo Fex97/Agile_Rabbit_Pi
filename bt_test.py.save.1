@@ -14,7 +14,7 @@ lastadded =0
 atime=0
 devfound =False
 while True:
-	nrby = bluetooth.discover_devices(duration=2)
+	nrby = bluetooth.discover_devices(duration=2,lookup_names=True)
 	for item in nrby:
 		print("\n\r")
 		print(item)
@@ -32,36 +32,28 @@ while True:
 	if devfound ==False:
 		lastadded= atime
 
-	if num >= 5:
+	if num >= 3:
 		print("COMPARE TO FIREBASE\n\r")
 		os.system("sudo pon fona")
 		time.sleep(3)
-		enheter = firebase.get('/devices',None)
-		for y in devicelist:
-			if not y in enheter:
-				print("not exist\n")
-				firebase.put('/devices',y,datetime.now())
-			else:
-				print("already exists\n")
+		devices = firebase.get('/devices',None)
 		os.system("sudo poff fona")
+		for x in devicelist:
+			if 
+		print(devices)
+		for x in devicelist:
+		
+			print(x)
+		time.sleep(3)
 		devicelist = []
 		devfound=False
-		num = 0
 	#TIMEOUT IF
 	if abs(atime.minute - lastadded.minute) >=1:
 		print("TIMEOUT\n\r")
 		print("COMPARE TO FIREBASE\n\r")
-		os.system("sudo pon fona")
+		for x in devicelist:
+			print(x)
 		time.sleep(3)
-		enheter = firebase.get('/devices',None)
-		for y in devicelist:
-			if not y in enheter:
-				print("not exist\n")
-				firebase.put('/devices',y,datetime.now())
-			else:
-				print("already exists\n")
-		os.system("sudo poff fona")
 		devicelist =[]
 		devfound=False
-		lastadded=0
-		num = 0
+	

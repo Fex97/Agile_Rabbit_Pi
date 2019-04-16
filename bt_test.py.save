@@ -1,0 +1,26 @@
+import bluetooth
+import time
+
+print("STARTED BLUETOOTH SCANNING")
+devicelist = []
+num=0
+time=0
+while True:
+	print("SCANNING")
+	nrby = bluetooth.discover_devices(duration=2,lookup_names=True)
+	for item in nrby:
+		if item in devicelist:
+			print("DEVICE ALREADY IN LIST")
+		else:
+			devicelist.append(item)
+			print("NEW DEVICE ADDED TO LIST")
+			num=num+1
+			time= datetime.now()
+			
+	#only for testing
+	for x in devicelist:
+		print(x)
+	if num >= 5:
+		print("COMPARE TO FIREBAS
+	
+
