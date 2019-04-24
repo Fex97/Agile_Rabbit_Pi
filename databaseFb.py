@@ -1,18 +1,21 @@
 from firebase import firebase
 import time
+import os
 
 firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 
-	
-def db_upload(dir,value):
-	firebase.put(dir,value)
-	time.sleep(2)
-	
-	
-		
+def db_upload(dir,value1,value2):
+	os.system("sudo pon fona")
+	time.sleep(3)
+	firebase.put(dir,value1,value2)
+	os.system("sudo poff fona")
+	time.sleep(1)
+
 def db_download(dir):
+	os.system("sudo pon fona")
+	time.sleep(3)
 	result = firebase.get(dir, None)
-	time.sleep(2)
+	os.system("sudo poff fona")
+	time.sleep(1)
 	return result
 
-		

@@ -5,7 +5,7 @@ from firebase import firebase
 from datetime import datetime
 import os
 
-#firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
+firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 
 def mainloop(firebase):
 	print("\n\rSTARTED BLUETOOTH SCANNING\n\r")
