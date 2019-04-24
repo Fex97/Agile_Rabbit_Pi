@@ -28,6 +28,18 @@ class TestDatabase(unittest.TestCase):
 		firebase.delete('/test','')
 		os.system("sudo poff fona")
 		time.sleep(1)
+
+	def test_compare(self):
+		os.system("sudo pon fona")
+		time.sleep(3)
+		firebase.put('/test','test31','')
+		time.sleep(1)
+		firebase.put('/test','test32','')
+		time.sleep(1)
+		firebase.put('/test','test33','')
+		os.system("sudo poff fona")
+		time.sleep(1)
+		self.assertTrue(databaseFb.db_compare('/test','test32'))
 if __name__ == '__main__':
 	firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 	unittest.main()

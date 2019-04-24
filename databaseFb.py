@@ -19,3 +19,13 @@ def db_download(dir):
 	time.sleep(1)
 	return result
 
+def db_compare(dir,value):
+	os.system("sudo pon fona")
+	time.sleep(3)
+	result=firebase.get(dir,None)
+	os.system("sudo poff fona")
+	time.sleep(1)
+	if value in result:
+		return True
+	else:
+		return False
