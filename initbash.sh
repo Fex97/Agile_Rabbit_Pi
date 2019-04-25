@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#borde byta plats så den ej behöver login // rclocal t ex
 clear
 echo "
  __          __  _                            _______      _____       _     _     _ _     _____ _ 
