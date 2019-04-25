@@ -8,6 +8,10 @@ from threading import Thread
 import collections
 
 def bluetooth_scan():
+
+        maxunits =2
+        timeoutm = 1
+        
 	devicelist = []
 	num = 0
 	lastadded = 0
@@ -15,7 +19,7 @@ def bluetooth_scan():
 	devfound = False
 	while True:
 		#print("HEJ\n")
-		nrby = bluetooth.discover_devices(duration=1)
+		nrby = bluetooth.discover_devices(duration=2)
 		for item in nrby:
 			if not item in devicelist:
 				devicelist.append(item)
@@ -28,7 +32,7 @@ def bluetooth_scan():
 			lastadded= atime
 
 
-		if num>=2 or abs(atime.minute-lastadded.minute)>=1:
+		if num>=maxunits or abs(atime.minute-lastadded.minute)>=timeoutm:
 			for x in devicelist:
 				buffer.append(x)
 
@@ -41,8 +45,8 @@ def bluetooth_compareToUsers():
 		#print("da\n")
 		if len(buffer) is not 0:
 			value = buffer.popleft()
-			if not db_compare('/devices',value):
-				db_upload('/devices',value,'tid')
+			if not db_compare('/users',value):
+				db_upload('/users/'+value+'/pay_flag',datetime.now())
 
 		time.sleep(1)
 
