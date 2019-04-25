@@ -10,6 +10,14 @@ def db_upload(dir,value1,value2):
 	firebase.put(dir,value1,value2)
 	os.system("sudo poff fona")
 	time.sleep(1)
+	
+def db_update(dir,child,value):
+	os.system("sudo pon fona")
+	time.sleep(3)
+	dir = ("{}/{}".format(dir,child))
+	firebase.update({ dir : value})
+	os.system("sudo poff fona")
+	time.sleep(1)	
 
 def db_download(dir):
 	os.system("sudo pon fona")
