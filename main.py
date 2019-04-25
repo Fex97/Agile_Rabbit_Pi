@@ -14,7 +14,7 @@ def bluetooth_scan():
 	atime = 0
 	devfound = False
 	while True:
-		print("HEJ\n")
+		#print("HEJ\n")
 		nrby = bluetooth.discover_devices(duration=1)
 		for item in nrby:
 			if not item in devicelist:
@@ -38,7 +38,7 @@ def bluetooth_scan():
 
 def bluetooth_compareToUsers():
 	while True:
-		print("da\n")
+		#print("da\n")
 		if len(buffer) is not 0:
 			value = buffer.popleft()
 			if not db_compare('/devices',value):
