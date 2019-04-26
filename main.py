@@ -32,23 +32,22 @@ def bluetooth_scan():
 		if num>=maxunits or abs(atime.minute-lastadded.minute)>=timeoutm:
 			for x in devicelist:
 				buffer.append(x)
-
 			devicelist = []
 
 def bluetooth_compareToUsers():
 	while True:
 		if len(buffer) is not 0:
 			value = buffer.popleft()
-			print(value)
-			if databaseFb.db_compare('/Users',value):
-				print("User found, uploading flag")
-				string = "/Users/{}".format(value)
-				date = datetime.now()
-				dateTime = re.findall(r"\d{4}.\d{2}.\d{2}.\d+.\d+","{}".format(date))
-				databaseFb.db_upload(string,'/pay_flag', "{}".format(dateTime[0]))
-		time.sleep(1)
-
-
+			with open('users.txt', 'r') as userList:
+				for line in userList:
+					if value in line:
+						print("User found, uploading flag")
+						string = "/Users/{}".format(value)
+						date = datetime.now()
+						dateTime = re.findall(r"\d{4}.\d{2}.\d{2}.\d+.\d+","{}".format(date))
+						databaseFb.db_upload(string,'/pay_flag', "{}".format(dateTime[0]))
+			userList.close()
+			
 if __name__=="__main__":
 
 	buffer = collections.deque(maxlen=50)
