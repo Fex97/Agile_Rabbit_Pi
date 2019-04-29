@@ -45,7 +45,9 @@ def bluetooth_compareToUsers():
 						string = "/Users/{}".format(value)
 						date = datetime.now()
 						dateTime = re.findall(r"\d{4}.\d{2}.\d{2}.\d+.\d+","{}".format(date))
-						databaseFb.db_upload(string,'/pay_flag', "{}".format(dateTime[0]))
+						string tmpTime= dateTime[0]
+						tmpTime = tmpTime.replace('T',',')
+						databaseFb.db_upload(string,'/timestamp', "{}".format(tmpTime))
 			userList.close()
 			
 if __name__=="__main__":
