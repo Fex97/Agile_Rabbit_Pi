@@ -13,6 +13,6 @@ echo "
 "
 
 
-python /home/pi/programs/git/Agile_Rabbit_Pi/onstartup.py
+python /home/pi/programs/git/Agile_Rabbit_Pi/onstartupV2.py
 echo "done..."
 

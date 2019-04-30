@@ -1,27 +1,5 @@
-LATEST STARTUP LOG
-request at cmd: AT
- OK
-
-request at cmd: AT+CGNSPWR=1
- OK
-
-request at cmd: AT+CGNSPWR?
 GNSS IS ON
- OK
+RSSI OK  22
+BATTERY LEVEL: 89
+VOLTAGE LEVEL: 4114
 
-request at cmd: AT+COPS?
-NETWORK +COPS: 0,0,"TELIA MOBILE"
-
- OK
-
-request at cmd: AT+CSQ
-RSSI OK  26
- OK
-
-request at cmd: AT+CBC
-BATTERY LEVEL: 35
-VOLTAGE LEVEL: 3681
-
- OK
-
-request at cmd: AT+CGNSINF
