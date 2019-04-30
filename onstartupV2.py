@@ -91,7 +91,7 @@ def check_batteryLevel(ser):
 			if int(batteryPercent) < 10:
 				logging.error("CRITICAL BATTERY LEVEL REACHED " +batteryPercent)
 				return False
-			if int(voltageLevel) < 3300 or int(voltageLevel) > 4200:
+			if int(voltageLevel) < 3300 or int(voltageLevel) > 4300:
 				logging.error("CRITICAL VOLTAGE LEVEL REACHED "+voltageLevel)
 				return False
 			else:
@@ -114,7 +114,8 @@ def check_gpsFix(ser):
 			if fix == "1":
 				logging.error("GPS fix found")
 				return True
-		if fails > 200:
+
+		if fails >10:
 			logging.error("GPS fix not found")
 			return False
 		fails = fails + 1
@@ -139,6 +140,7 @@ def get_coordinates(ser):
 
 
 def main():
+	os.system("sudo poff fona")
 	ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 	logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 
