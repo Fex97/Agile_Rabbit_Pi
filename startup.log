@@ -1,7 +1,7 @@
 GNSS IS ON
-RSSI OK  21
-BATTERY LEVEL: 89
-VOLTAGE LEVEL: 4120
+RSSI OK  24
+BATTERY LEVEL: 22
+VOLTAGE LEVEL: 3582
 
 GPS fix not found
-Start up tests failed.
+All tests passed
