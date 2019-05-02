@@ -13,25 +13,28 @@ def bluetooth_appendlist(item,devicelist):
 		print(item)
 		devicelist.append(item)
 		lastadded = datetime.now()
-
 	return devicelist
 
+def bluetooth_appendbuffer(devicelist,buffer):
+        currenttime = datetime.now()
+        timediff = abs(currenttime.minute-lastadded.minute)
+        if num >= maxunits or timediff >= timeoutm:
+		for x in devicelist:
+			buffer.append(x)
+		devicelist = []
+        return buffer
 
 def bluetooth_scan():
         maxunits = 25
         timeoutm = 1
 	devicelist = []
 	num = 0
-	atime = 0
+	currenttime = 0
 	while True:
 		nrby = bluetooth.discover_devices(duration=2)
 		for item in nrby:
 			bluetooth_appendlist(item,devicelist)
-		atime = datetime.now()
-		if num>=maxunits or abs(atime.minute-lastadded.minute)>=timeoutm:
-			for x in devicelist:
-				buffer.append(x)
-			devicelist = []
+		bluetooth_appendbuffer(devicelist,buffer)
 
 def bluetooth_compareToUsers():
 	while True:
