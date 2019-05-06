@@ -1,5 +1,5 @@
 #!/bin/bash
-#borde byta plats så den ej behöver login // rclocal t ex
+
 clear
 echo "
  __          __  _                            _______      _____       _     _     _ _     _____ _ 
@@ -11,7 +11,7 @@ echo "
                                                                                                    
                                                                                                    
 "
-
+sudo poff fona
 
 python /home/pi/programs/git/Agile_Rabbit_Pi/onstartupV2.py
 echo "done..."

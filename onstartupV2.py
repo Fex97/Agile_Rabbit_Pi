@@ -115,7 +115,7 @@ def check_gpsFix(ser):
 				logging.error("GPS fix found")
 				return True
 
-		if fails >10:
+		if fails >100:
 			logging.error("GPS fix not found")
 			return False
 		fails = fails + 1
@@ -139,30 +139,37 @@ def get_coordinates(ser):
                 time.sleep(1)
 
 
-def main():
+def mainstart():
 	os.system("sudo poff fona")
 	ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 	logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 
 	init_leds()
-
-	if check_uartConnection(ser) and set_CGNSPower(ser) and check_CGNSPower(ser)and check_RSSI(ser) and check_batteryLevel(ser) and check_gpsFix(ser):
+	#deleted check_fix() function call.
+	if check_uartConnection(ser) and set_CGNSPower(ser) and check_CGNSPower(ser)and check_RSSI(ser) and check_batteryLevel(ser):
+		print("OK")
                 logging.error("All tests passed")
-                latitude,longitude = get_coordinates(ser)
+                #latitude,longitude = get_coordinates(ser)
 		os.system("sudo pon fona")
-		timne.sleep(3)
-		databaseFb.db_upload('/coordinates','Latitude',latitude)
-                databaseFb.db_upload('/coordinates','Longitude',longitude)
+		time.sleep(3)
+		#databaseFb.db_upload('/coordinates','Latitude',latitude)
+                #databaseFb.db_upload('/coordinates','Longitude',longitude)
 		GPIO.output(greenled,1)
 		GPIO.output(redled,0)
-                import main
+                #import main
+		return True
 	else:
+		print("FAILED")
 		logging.error("Start up tests failed.")
 		GPIO.output(greenled,0)
 		GPIO.output(redled,1)
+		return False
 
 if __name__ == "__main__":
-	main()
+	#mainstart()
+	if(mainstart()):
+		os.system("cd/programs/git/Agile_Rabbit_Pi")
+		os.system("python main.py")
 
 
 

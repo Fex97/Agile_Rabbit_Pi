@@ -6,20 +6,6 @@ import time
 import main
 
 class TestStartupTests(unittest.TestCase):
-        def test_bluetooth_appendbuffer_EXISTS(self):
-                #arrange
-                devicelist =["dev3","dev2","dev3"]
-                buffer = ["dev1","dev2"]
-                timediff = "1"
-                lent = len(devicelist)
-                #act
-                result = bluetooth_appendbuffer(devicelist,buffer)
-                #assert
-                self.assertEqual(lent,len(result))
-        def test_bluetooth_appendbuffer_NOEXISTS(self):
-                #arrange
-                #act
-                #assert
 	def test_bluetooth_appendlist_NOTEXITS(self):
 		#arrange
 		item = "dev3"
