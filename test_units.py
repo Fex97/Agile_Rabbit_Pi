@@ -1,8 +1,8 @@
 import unittest
 import databaseFb
-from firebase import firebase
 import os
 import time
+from firebase import firebase
 
 class TestDatabase(unittest.TestCase):
 	def test_upload(self):
@@ -40,6 +40,7 @@ class TestDatabase(unittest.TestCase):
 		os.system("sudo poff fona")
 		time.sleep(1)
 		self.assertTrue(databaseFb.db_compare('/test','test32'))
+		
 if __name__ == '__main__':
 	firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 	unittest.main()

@@ -1,11 +1,11 @@
 import bluetooth
 import time
-from datetime import date
-from datetime import datetime
 import databaseFb
-from threading import Thread
 import collections
 import re
+from datetime import date
+from datetime import datetime
+from threading import Thread
 
 def bluetooth_scan():
         maxunits = 25

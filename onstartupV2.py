@@ -5,7 +5,6 @@ import os
 import databaseFb
 import RPi.GPIO as GPIO
 
-
 redled = 11
 greenled = 13
 
@@ -117,7 +116,6 @@ def check_gpsFix(ser):
 			if fix == "1":
 				logging.info("GPS fix found")
 				return True
-
 		if fails >maxFixFails:
 			logging.info("GPS fix not found")
 			return False
@@ -138,16 +136,13 @@ def get_coordinates(ser):
                         return latitude,longitude
                 if fails > 5:
                         return 0
-
                 fails = fails + 1
                 time.sleep(1)
-
 
 def mainstart():
 	os.system("sudo poff fona")
 	ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 	logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
-
 	init_leds()
 	if check_uartConnection(ser) and set_CGNSPower(ser) and check_CGNSPower(ser)and check_RSSI(ser) and check_batteryLevel(ser) and check_gpsFix(ser):
 		print("OK")
