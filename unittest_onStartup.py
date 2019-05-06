@@ -3,27 +3,8 @@ from mock import Mock #pip install mock.
 from mock import patch
 import onstartupV2
 import time
-import main
 
 class TestStartupTests(unittest.TestCase):
-	def test_bluetooth_appendlist_NOTEXITS(self):
-		#arrange
-		item = "dev3"
-		list = ["dev1","dev2","dev4","dev5"]
-		lent = len(list)
-		#act
-		result = main.bluetooth_appendlist(item,list)
-		#assert
-		self.assertEqual(lent+1,len(result))
-	def test_bluetooth_appendlist_EXISTS(self):
-		#arrange
-		item = "dev3"
-		list = ["dev1","dev2","dev3","dev4","dev5"]
-		lent = len(list)
-		#act
-		result = main.bluetooth_appendlist(item,list)
-		#assert
-		self.assertEqual(lent,len(result))
         def test_uartConnection(self):
                 ser = Mock()
                 ser.readline = Mock(return_value="OK")

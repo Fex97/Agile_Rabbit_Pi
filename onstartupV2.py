@@ -21,8 +21,10 @@ def check_uartConnection(ser):
 	while True:
 		response=ser.readline()
 		if "OK" in response:
+			logging.info("UART CONNECTION OK")
 			return True
 		if fails>5:
+			logging.error("UART CONNECTION FAIL")
 			return False
 		fails = fails + 1
 		time.sleep(1)
@@ -47,7 +49,7 @@ def check_CGNSPower(ser):
 	while True:
 		response = ser.readline()
 		if "1" in response:
-			logging.error("GNSS IS ON")
+			logging.info("GNSS IS ON")
 			return True
 		if fails>5:
 			logging.error("GNSS IS OFF")
@@ -65,7 +67,7 @@ def check_RSSI(ser):
 			tempSplit = response.split(":")
 			tempSplit2 = tempSplit[1].split(",")
 			if int(tempSplit2[0]) > 5:
-				logging.error("RSSI OK "+tempSplit2[0])
+				logging.info("RSSI OK "+tempSplit2[0])
 				return True
 			if int(tempSplit2[0]) <=5:
 				logging.error("RSSI to low "+tempSplit2[0])
@@ -86,8 +88,8 @@ def check_batteryLevel(ser):
 			tempSplit = response.split(",")
 			batteryPercent = tempSplit[1]
 			voltageLevel = tempSplit[2]
-			logging.error("BATTERY LEVEL: "+batteryPercent)
-			logging.error("VOLTAGE LEVEL: "+voltageLevel)
+			logging.info("BATTERY LEVEL: "+batteryPercent)
+			logging.info("VOLTAGE LEVEL: "+voltageLevel)
 			if int(batteryPercent) < 10:
 				logging.error("CRITICAL BATTERY LEVEL REACHED " +batteryPercent)
 				return False
@@ -103,6 +105,7 @@ def check_batteryLevel(ser):
 		time.sleep(1)
 
 def check_gpsFix(ser):
+	maxFixFails = 100
 	ser.write("AT+CGNSINF\r")
 	print("6")
 	fails = 0
@@ -112,12 +115,13 @@ def check_gpsFix(ser):
 			tempSplit = response.split(",")
 			fix = tempSplit[1]
 			if fix == "1":
-				logging.error("GPS fix found")
+				logging.info("GPS fix found")
 				return True
 
-		if fails >100:
-			logging.error("GPS fix not found")
+		if fails >maxFixFails:
+			logging.info("GPS fix not found")
 			return False
+		print("GPS FIX FAIL NR:" + str(fails) + "/" + str(maxFixFails))
 		fails = fails + 1
 		time.sleep(1)
 
@@ -145,31 +149,25 @@ def mainstart():
 	logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 
 	init_leds()
-	#deleted check_fix() function call.
-	if check_uartConnection(ser) and set_CGNSPower(ser) and check_CGNSPower(ser)and check_RSSI(ser) and check_batteryLevel(ser):
+	if check_uartConnection(ser) and set_CGNSPower(ser) and check_CGNSPower(ser)and check_RSSI(ser) and check_batteryLevel(ser) and check_gpsFix(ser):
 		print("OK")
                 logging.error("All tests passed")
-                #latitude,longitude = get_coordinates(ser)
+                latitude,longitude = get_coordinates(ser)
 		os.system("sudo pon fona")
 		time.sleep(3)
-		#databaseFb.db_upload('/coordinates','Latitude',latitude)
-                #databaseFb.db_upload('/coordinates','Longitude',longitude)
+		databaseFb.db_upload('/coordinates','Latitude',latitude)
+                databaseFb.db_upload('/coordinates','Longitude',longitude)
 		GPIO.output(greenled,1)
 		GPIO.output(redled,0)
-                #import main
-		return True
+                import main
 	else:
 		print("FAILED")
 		logging.error("Start up tests failed.")
 		GPIO.output(greenled,0)
 		GPIO.output(redled,1)
-		return False
 
 if __name__ == "__main__":
-	#mainstart()
-	if(mainstart()):
-		os.system("cd/programs/git/Agile_Rabbit_Pi")
-		os.system("python main.py")
+	mainstart()
 
 
 

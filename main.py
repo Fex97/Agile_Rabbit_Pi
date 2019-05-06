@@ -22,6 +22,7 @@ def bluetooth_scan():
 				print(item)
 				devicelist.append(item)
 				num = num+1
+				print(num)
 				devfound = True
 				lastadded = datetime.now()
 
@@ -33,6 +34,7 @@ def bluetooth_scan():
 			for x in devicelist:
 				buffer.append(x)
 			devicelist = []
+			num=0
 
 def bluetooth_compareToUsers():
 	while True:
