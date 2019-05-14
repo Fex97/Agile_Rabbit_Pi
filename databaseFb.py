@@ -5,6 +5,7 @@ import os
 firebase = firebase.FirebaseApplication('https://agiltprojekt.firebaseio.com',None)
 
 def db_upload(dir,value1,value2):
+	print("database upload")
 	firebase.put(dir,value1,value2)
 
 def db_update(dir,child,value):

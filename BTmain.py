@@ -49,8 +49,7 @@ def bluetooth_compareToUsers():
 				tmpTime = tmpTime.replace('T',',')
 				databaseFb.db_upload(string,'/timestamp', "{}".format(tmpTime))
 
-if __name__=="__main__":
-
+if __name__=="BTmain":
 	buffer = collections.deque(maxlen=50)
 
 	t1 = Thread(target=bluetooth_scan)

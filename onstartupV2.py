@@ -4,6 +4,7 @@ import time
 import os
 import databaseFb
 import RPi.GPIO as GPIO
+from subprocess import call
 
 redled = 11
 greenled = 13
@@ -15,9 +16,9 @@ def init_leds():
 
 def check_uartConnection(ser):
 	print("1")
-	ser.write("AT\r")
 	fails = 0
 	while True:
+		ser.write("AT\r")
 		response=ser.readline()
 		if "OK" in response:
 			logging.info("UART CONNECTION OK")
@@ -104,12 +105,15 @@ def check_batteryLevel(ser):
 		time.sleep(1)
 
 def check_gpsFix(ser):
-	maxFixFails = 100
-	ser.write("AT+CGNSINF\r")
+	maxFixFails = 150
 	print("6")
 	fails = 0
 	while True:
+		ser.write("AT+CGNSINF\r")
+		time.sleep(1)
+		GPIO.output(redled,1)
 		response = ser.readline()
+		print(response)
 		if "+CGNSINF:" in response:
 			tempSplit = response.split(",")
 			fix = tempSplit[1]
@@ -121,6 +125,7 @@ def check_gpsFix(ser):
 			return False
 		print("GPS FIX FAIL NR:" + str(fails) + "/" + str(maxFixFails))
 		fails = fails + 1
+		GPIO.output(redled,0)
 		time.sleep(1)
 
 def get_coordinates(ser):
@@ -148,13 +153,14 @@ def mainstart():
 		print("OK")
                 logging.error("All tests passed")
                 latitude,longitude = get_coordinates(ser)
+		print(longitude,latitude)
 		os.system("sudo pon fona")
-		time.sleep(3)
+		time.sleep(5)
 		databaseFb.db_upload('/coordinates','Latitude',latitude)
                 databaseFb.db_upload('/coordinates','Longitude',longitude)
 		GPIO.output(greenled,1)
 		GPIO.output(redled,0)
-                import main
+                import BTmain
 	else:
 		print("FAILED")
 		logging.error("Start up tests failed.")
@@ -163,6 +169,7 @@ def mainstart():
 
 if __name__ == "__main__":
 	mainstart()
+
 
 
 
