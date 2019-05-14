@@ -7,6 +7,12 @@ from datetime import date
 from datetime import datetime
 from threading import Thread
 
+# ---------------------------------------------------------------------------------
+# bluetooth_scan()
+# Function that scans for nearby bluetooth devices and adds them to a devicelist.
+# The devicelist is moved to a circular buffer after a set delay or if a set
+# number of devices are found.
+# ---------------------------------------------------------------------------------
 def bluetooth_scan():
         maxunits = 25
         timeoutm = 1
@@ -36,6 +42,12 @@ def bluetooth_scan():
 			devicelist = []
 			num=0
 
+# ---------------------------------------------------------------------------------
+# bluetooth_compareToUsers()
+# Function that compare bluetooth devices from the circular buffer to Firebase.
+# If a matching device is found, the current date and time for that particilar
+# device is updated.
+# ---------------------------------------------------------------------------------
 def bluetooth_compareToUsers():
 	while True:
 		if len(buffer) is not 0:

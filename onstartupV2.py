@@ -9,11 +9,20 @@ from subprocess import call
 redled = 11
 greenled = 13
 
+#---------------------------------------------------------------------------------
+# init_leds()
+# Gpio initialization for the leds.
+#---------------------------------------------------------------------------------
 def init_leds():
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(redled,GPIO.OUT,initial =0)
 	GPIO.setup(greenled,GPIO.OUT,initial=0)
 
+#---------------------------------------------------------------------------------
+# check_uartConnection(ser) where ser is a serial connection
+# Sends "AT" to fona808 via uart and checks if "OK" is returned back to se that the
+# uart connection is ok.
+#---------------------------------------------------------------------------------
 def check_uartConnection(ser):
 	print("1")
 	fails = 0
@@ -29,6 +38,10 @@ def check_uartConnection(ser):
 		fails = fails + 1
 		time.sleep(1)
 
+#---------------------------------------------------------------------------------
+# set_CGNSPower(ser) where ser is a serial connection
+# Sends "AT+CGNSPWR=1" to fona808 via uart to set CGNSPower to 1.
+#---------------------------------------------------------------------------------
 def set_CGNSPower(ser):
 	ser.write("AT+CGNSPWR=1\r")
 	print("2")
@@ -42,6 +55,10 @@ def set_CGNSPower(ser):
 		fails = fails + 1
 		time.sleep(1)
 
+#---------------------------------------------------------------------------------
+# check_CGNSPower(ser) where ser is a serial connection
+# Sends "AT+CGNSPWR?" to fona808 via uart to check if CGNS power is on(1).
+#---------------------------------------------------------------------------------
 def check_CGNSPower(ser):
 	print("3")
 	ser.write("AT+CGNSPWR=1\r")
@@ -57,6 +74,11 @@ def check_CGNSPower(ser):
 		fails = fails + 1
 		time.sleep(1)
 
+#---------------------------------------------------------------------------------
+# check_RSSI(ser) where ser is a serial connection
+# Sends "AT+CSQ" to fona808 via uart to check RSSI level. If its too low return
+# False. If RSSI is OK return True.
+#---------------------------------------------------------------------------------
 def check_RSSI(ser):
 	print("4")
 	ser.write("AT+CSQ\r")
@@ -78,6 +100,12 @@ def check_RSSI(ser):
 		fails = fails + 1
 		time.sleep(1)
 
+# ---------------------------------------------------------------------------------
+# check_batteryLevel(ser) where ser is the serial connection
+# Sends "AT+CBC" to fona 808 via uart and checks if "+CBC" is returned.
+# If it's the correct response, checks if the returned batterylevel is within safe
+# margins. Returns true if OK, else False.
+# ---------------------------------------------------------------------------------
 def check_batteryLevel(ser):
 	print("5")
 	ser.write("AT+CBC\r")
@@ -104,6 +132,12 @@ def check_batteryLevel(ser):
 		fails = fails + 1
 		time.sleep(1)
 
+# ---------------------------------------------------------------------------------
+# check_gpsFix(ser) where ser is the serial connection
+# Sends "AT+CGNSINF" to fona 808 via uart and checks if "+CGNSINF" is returned.
+# If it's the correct response, checks if the "fix" variable is 1. Else try again
+# maxFixFails number of times. 
+# ---------------------------------------------------------------------------------
 def check_gpsFix(ser):
 	maxFixFails = 150
 	print("6")
@@ -128,6 +162,12 @@ def check_gpsFix(ser):
 		GPIO.output(redled,0)
 		time.sleep(1)
 
+# ---------------------------------------------------------------------------------
+# get_coordinates(ser) where ser is the serial connection
+# Sends "AT+CGNSINF" to fona 808 via uart and checks if "+CGNSINF" is returned.
+# If it's the correct response, splits the string and puts lat and long into
+# variables, else try again
+# ---------------------------------------------------------------------------------
 def get_coordinates(ser):
 	print("7")
 	ser.write("AT+CGNSINF\r")
@@ -145,7 +185,7 @@ def get_coordinates(ser):
                 time.sleep(1)
 
 def mainstart():
-	os.system("sudo poff fona")
+	os.system("sudo poff fona") #Start GSM connection
 	ser = serial.Serial('/dev/serial0',115200,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=1)
 	logging.basicConfig(filename='startup.log', filemode='w', format='%(message)s')
 	init_leds()
